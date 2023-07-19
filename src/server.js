@@ -1,10 +1,6 @@
 'use strict';
 
-// 3rd Party Resources
 const express = require('express');
-const bcrypt = require('bcrypt');
-const base64 = require('base-64');
-const { Sequelize, DataTypes } = require('sequelize');
 
 // Prepare the express app
 const app = express();
@@ -12,22 +8,8 @@ const app = express();
 // Process JSON input and put the data on req.body
 app.use(express.json());
 
-const sequelize = new Sequelize(process.env.DATABASE_URL);
-
 // Process FORM intput and put the data on req.body
 app.use(express.urlencoded({ extended: true }));
-
-// Create a Sequelize model
-const Users = sequelize.define('User', {
-  username: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  }
-});
 
 // Signup Route -- create a new user
 // Two ways to test this route with httpie
@@ -35,20 +17,20 @@ const Users = sequelize.define('User', {
 // http post :3000/signup username=john password=foo
 app.post('/signup', async (req, res) => {
 
-  try {
-    req.body.password = await bcrypt.hash(req.body.password, 10);
-    const record = await Users.create(req.body);
-    res.status(200).json(record);
-  } catch (e) { res.status(403).send('Error Creating User'); }
-});
+    try {
+      req.body.password = await bcrypt.hash(req.body.password, 10);
+      const record = await Users.create(req.body);
+      res.status(200).json(record);
+    } catch (e) { res.status(403).send('Error Creating User'); }
+  });
+  
+  
+  // Signin Route -- login with username and password
+  // test with httpie
+  // http post :3000/signin -a john:foo
 
-
-// Signin Route -- login with username and password
-// test with httpie
-// http post :3000/signin -a john:foo
 app.post('/signin', async (req, res) => {
-
-  /*
+      /*
     req.headers.authorization is : "Basic am9objpmb28="
     To get username and password from this, take the following steps:
       - Turn that string into an array by splitting on ' '
@@ -83,10 +65,4 @@ app.post('/signin', async (req, res) => {
 
 });
 
-// make sure our tables are created, start up the HTTP server.
-sequelize.sync()
-  .then(() => {
-    app.listen(3000, () => console.log('server up'));
-  }).catch(e => {
-    console.error('Could not start server', e.message);
-  });
+module.exports = app;
