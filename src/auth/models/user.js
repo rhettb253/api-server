@@ -1,5 +1,7 @@
 'use strict';
 
+// const bcrypt = require('bcrypt');
+
 // Create a Sequelize model
 const user = (sequelizeInstance, DataTypes) =>
 sequelizeInstance.define('User', {
@@ -11,12 +13,18 @@ sequelizeInstance.define('User', {
       type: DataTypes.STRING,
       allowNull: false,
     }
-  },
-  {hooks: {
-    beforeCreate() {
-      console.log('still need to hash the password');
-      // hash the plain text password before we save a user to the db
-    }}
   });
+
+  //the code below does not work
+  // ,
+  // {hooks: {
+  //   async beforeCreate() {
+  //     console.log('trying to hash the password');
+  //     console.log(this.password);
+  //     const hashedPW = await bcrypt.hash(this.password, 10);
+  //     user.password = hashedPW;
+  //     console.log(this.password);
+  //   }}
+  // }
 
 module.exports = user;

@@ -12,6 +12,10 @@ const basicAuth = async (req, res, next) => {
     //we want to split Basic away from the encoded part
     let encodedStr = authorization.split(' ')[1];
     //console.log(encodedStr);
+
+    //another way of doing this: 
+    //let basicHeaderParts = req.headers.authorization.split(' ');
+    //let encodedString = basicHeaderParts.pop();
     
     // now we decode the encoded string
     let decodedStr = base64.decode(encodedStr);
