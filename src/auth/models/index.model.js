@@ -10,7 +10,7 @@ const sequelize = new Sequelize(process.env.DATABASE_URL);
 //call functions to make models
 let User = user(sequelize, DataTypes);
 
-module.exports = User, sequelize;
+module.exports = { User, sequelize };
 
 // const testDbConnection = async () => {
 // try {
