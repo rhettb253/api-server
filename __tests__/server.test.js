@@ -26,6 +26,7 @@ describe('test the server routes and database', () => {
     });
 
     test('we can sign in a user via basicAuth through /signin', async () => {
-        
+        const res = await mockReq.post('/signin').auth(user1.username, user1.password);
+        expect(res.status).toBe(200);
     });
 });
